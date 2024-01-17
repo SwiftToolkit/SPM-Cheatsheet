@@ -1,7 +1,7 @@
 # The SPM Cheatsheet
 
 > [!NOTE]
-> Changes done here will be automatically deployed at [SwiftToolkit](https://SwiftToolkit.dev/spm-cheatsheet). Contributions are welcome!
+> Changes applied here will be automatically deployed at [SwiftToolkit](https://SwiftToolkit.dev/spm-cheatsheet). [Contributions](https://github.com/swifttoolkit/spm-cheatsheet/pulls/new) are welcome!
 
 <!-- Content start -->
 
@@ -61,9 +61,44 @@ When using a local dependency, there is no option to pass a version, branch or c
 
 ## Targets Vs Products
 
-While they might sound confusing, target and products are not exactly the same. A `Target` is the most basic building block of a package: it contains source files and possibly resources as well. Targets can depend on other targets. A `Product`, in the other hand, is how you can wrap a target and offer it to external consumers of your package. It can be either a library, an executable, or a plugin - you can find more on that below.
+While they might sound confusing, target and products are not exactly the same. A `Target` is the  basic building block of a package: it contains source files and possibly resources as well. Targets can depend on other targets. A `Product`, in the other hand, is how you can wrap a target and offer it to external consumers of your package. It can be either a library, an executable, or a plugin - you can find more on that below.
 
-## Targets (coming soon)
+## Targets
+
+To declare a regular target (meaning, not an executable nor a plugin, but a module), use the following static function:
+
+```swift
+.target(name: "my-module")
+```
+
+The only required parameter in this function is the target name. By default, SPM will look for source files under `Sources/[TargetName]`. If you have the source files located in a different directory, you can use the `path` parameter:
+
+```swift
+.target(name: "my-module", path: "Sources/another-folder")
+```
+
+Note that, when using this variant, SPM requires you to use a path **inside** within the scope of the package folder, so you cannot use directories that live outside it.
+
+### Target Dependencies
+
+It is very common to have a target depend on other targets, or other package's products. This can be achieve by adding a `Target.Dependency` using the `dependencies` parameter:
+
+To add a dependency on **another target from the same package**:
+
+```swift
+.target(name: "my-module", dependencies: [
+    .target("another-module")
+])
+```
+
+It is very common, though, to use a product vendored by another package. To add one, you must have added the package as a `Package.Dependency` first, as explained in the [_Adding Package Dependencies_](#adding-package-dependencies) section above. After that, you can reference one of its products:
+
+```swift
+.target(name: "my-module", dependencies: [
+    .product(name: "Alamofire", package: "Alamofire"),
+    .product(name: "NukeUI", package: "Nuke"),
+])
+```
 
 ## Products (coming soon)
 
