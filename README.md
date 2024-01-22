@@ -117,6 +117,25 @@ It is very common, though, to use a product vendored by another package. To add 
 ])
 ```
 
-## Products (coming soon)
+## Products
+
+A `Product` is how your package can expose build artifacts to external clients. They can be either a library, an executable, or a plugin.
+
+### Library
+
+A library makes one or more targets' public APIs available for consumption. In the case below, `MyTarget` is a target declared in the targets section of the package.
+
+```swift
+Package(
+    ...
+    products: [
+        .library(name: "MyLibrary", targets: ["MyTarget"])
+    ],
+    ...
+)
+
+```
+
+The `.library(name:type:targets:)` function also has a `type` argument, that expects an optional `Product.Library.LibraryType`, and it can be either dynamic, or static. The default parameter is `nil`, which tells SPM to choose between static or dynamic linking depending on the case.
 
 <!-- Content end -->
