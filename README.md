@@ -79,6 +79,23 @@ The only required parameter in this function is the target name. By default, SPM
 
 Note that, when using this variant, SPM requires you to use a path **inside** within the scope of the package folder, so you cannot use directories that live outside it.
 
+A target can also be a test target:
+
+```swift
+.testTarget(name: "my-module-tests")
+```
+
+Or, alternatively, an executable target, such as a command line tool that has dependency on the Swift Argument Parser:
+
+```swift
+.executableTarget(
+    name: "my-cli",
+    dependencies: [
+        .product(name: "ArgumentParser", package: "swift-argument-parser")
+    ]
+)
+```
+
 ### Target Dependencies
 
 It is very common to have a target depend on other targets, or other package's products. This can be achieve by adding a `Target.Dependency` using the `dependencies` parameter:
